@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Le Comptoir du Dex Club</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <p class="header__kicker">Dex Club · Casablanca</p>
+      <h1 class="header__title">Le Comptoir du Dex Club</h1>
+    </div>
+  </header>
+
+  <main class="container layout">
+    <!-- ================= Catalogue ================= -->
+    <section class="catalog" aria-labelledby="catalog-title">
+      <h2 id="catalog-title" class="section-title">Les cartes</h2>
+
+      <div class="toolbar">
+        <label class="field">
+          <span class="field__label">Rechercher une créature</span>
+          <input id="search" class="input" type="search" placeholder="Ex. Emberkit" autocomplete="off">
+        </label>
+
+        <!-- Palier 3 : tri -->
+        <label class="field">
+          <span class="field__label">Trier</span>
+          <select id="sort" class="input">
+            <option value="numero">Numéro</option>
+            <option value="prix-asc">Prix croissant</option>
+            <option value="prix-desc">Prix décroissant</option>
+          </select>
+        </label>
+      </div>
+
+      <!-- Boutons de type : créés en JavaScript (palier 1) -->
+      <div id="types" class="types" aria-label="Filtrer par type"></div>
+
+      <p id="count" class="count" aria-live="polite"></p>
+
+      <!-- Cartes : créées en JavaScript (palier 1) -->
+      <div id="grid" class="grid"></div>
+
+      <!-- Palier 3 : statistiques -->
+      <div id="stats" class="stats"></div>
+    </section>
+
+    <!-- ================= Colonne de droite ================= -->
+    <aside class="side">
+      <!-- Fiche de la créature choisie (palier 1) -->
+      <section id="detail" class="panel detail" aria-live="polite">
+        <p class="muted">Cliquez sur une carte pour voir sa fiche.</p>
+      </section>
+
+      <!-- Panier (palier 2) -->
+      <section class="panel" aria-labelledby="cart-title">
+        <div class="panel__head">
+          <h2 id="cart-title" class="section-title">Mon panier</h2>
+          <span id="cart-count" class="pill">0 carte</span>
+        </div>
+        <ul id="cart-list" class="cart-list"></ul>
+        <p class="cart-total">Total : <strong id="cart-total">0 DH</strong></p>
+      </section>
+
+      <!-- Palier 3 : proposer une carte -->
+      <section class="panel" aria-labelledby="form-title">
+        <h2 id="form-title" class="section-title">Proposer une carte</h2>
+        <form id="card-form" class="form" novalidate>
+          <label class="field">
+            <span class="field__label">Nom</span>
+            <input id="form-nom" name="nom" class="input">
+            <span class="error-message" data-error-for="nom"></span>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Type</span>
+            <select id="form-type" name="type" class="input">
+              <option>Feu</option>
+              <option>Eau</option>
+              <option>Plante</option>
+              <option>Électrik</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Rareté</span>
+            <select id="form-rarete" name="rarete" class="input">
+              <option>Commune</option>
+              <option>Rare</option>
+              <option>Légendaire</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Prix (DH)</span>
+            <input id="form-prix" name="prix" class="input" inputmode="numeric">
+            <span class="error-message" data-error-for="prix"></span>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Stock</span>
+            <input id="form-stock" name="stock" class="input" inputmode="numeric">
+            <span class="error-message" data-error-for="stock"></span>
+          </label>
+
+          <button class="btn btn--primary" type="submit">Proposer la carte</button>
+        </form>
+      </section>
+    </aside>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

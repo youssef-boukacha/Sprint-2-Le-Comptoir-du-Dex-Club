@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Tests des fonctions de données</title>
+  <style>
+    body { font-family: "Segoe UI", Arial, sans-serif; max-width: 860px; margin: 24px auto; padding: 0 16px; color: #14171d; }
+    h1 { font-size: 24px; } h2 { font-size: 18px; margin-top: 28px; }
+    li { margin: 4px 0; font-family: monospace; font-size: 14px; }
+    .ok { color: #15803d; } .ko { color: #b91c1c; font-weight: bold; }
+    .score { padding: 12px 16px; border-radius: 12px; background: #f4f4f5; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Tests des fonctions de données</h1>
+  <p>Ouvrez cette page avec Live Server (<code>tests/tests.html</code>). Chaque ligne verte est une règle respectée. Les tests du palier 3 sont des bonus.</p>
+  <p id="score" class="score"></p>
+  <div id="results"></div>
+
+  <script type="module">
+    import { cards } from "../data.js";
+    import * as C from "../js/cards.js";
+    import * as P from "../js/cart.js";
+
+    const results = document.querySelector("#results");
+    let passed = 0, total = 0, list;
+    const names = (arr) => (Array.isArray(arr) ? arr.map((c) => c.nom) : arr);
+    const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+    const section = (title) => { const h = document.createElement("h2"); h.textContent = title; list = document.createElement("ul"); results.append(h, list); };
+    function test(label, fn) {
+      total++;
+      let ok = false, info = "";
+      try { const r = fn(); ok = r === true; if (!ok) info = " → obtenu : " + JSON.stringify(r); }
+      catch (e) { info = " → erreur : " + e.message; }
+      if (ok) passed++;
+      const li = document.createElement("li");
+      li.className = ok ? "ok" : "ko";
+      li.textContent = (ok ? "✔ " : "✘ ") + label + (ok ? "" : info);
+      list.append(li);
+    }
+    const snapshot = JSON.stringify(cards);
+
+    section("Palier 1 · cards.js");
+    test('searchCards(cards, "kit") → Emberkit, Sparkit', () => same(names(C.searchCards(cards, "kit")), ["Emberkit", "Sparkit"]) || names(C.searchCards(cards, "kit")));
+    test('searchCards ignore les majuscules et les espaces ("  EMBER ")', () => same(names(C.searchCards(cards, "  EMBER ")), ["Emberkit"]) || names(C.searchCards(cards, "  EMBER ")));
+    test('searchCards(cards, "") → les 12 cartes', () => C.searchCards(cards, "").length === 12 || C.searchCards(cards, "").length);
+    test('searchCards(cards, "zzz") → []', () => (same(C.searchCards(cards, "zzz"), []) && C.searchCards(cards, "kit").length === 2) || "searchCards ne marche pas encore");
+    test('filterByType(cards, "Eau") → Tidalix, Reefling, Aquaphin', () => same(names(C.filterByType(cards, "Eau")), ["Tidalix", "Reefling", "Aquaphin"]) || names(C.filterByType(cards, "Eau")));
+    test('filterByType(cards, "Tous") → les 12 cartes', () => C.filterByType(cards, "Tous").length === 12);
+    test('filterByType renvoie un NOUVEAU tableau', () => (C.filterByType(cards, "Tous") !== cards && C.filterByType(cards, "Tous").length === 12) || "filterByType ne marche pas encore");
+    test('getVisibleCards(cards, { term: "kit", type: "Feu" }) → Emberkit', () => same(names(C.getVisibleCards(cards, { term: "kit", type: "Feu" })), ["Emberkit"]) || names(C.getVisibleCards(cards, { term: "kit", type: "Feu" })));
+    test('getVisibleCards(cards, { term: "", type: "Plante" }) → 3 cartes', () => C.getVisibleCards(cards, { term: "", type: "Plante" }).length === 3);
+    test('countByType(cards) → { Feu: 3, Eau: 3, Plante: 3, Électrik: 3 }', () => same(C.countByType(cards), { Feu: 3, Eau: 3, Plante: 3, "Électrik": 3 }) || C.countByType(cards));
+    test('countByType([]) → {}', () => (same(C.countByType([]), {}) && C.countByType(cards).Feu === 3) || "countByType ne marche pas encore");
+
+    section("Palier 2 · cart.js");
+    test("findCard(cards, 4) → Tidalix", () => P.findCard(cards, 4)?.nom === "Tidalix" || P.findCard(cards, 4));
+    test("addToCart([], 1, cards) → [{ id: 1, quantite: 1 }]", () => same(P.addToCart([], 1, cards), [{ id: 1, quantite: 1 }]) || P.addToCart([], 1, cards));
+    test("addToCart augmente la quantité d'une carte déjà présente", () => same(P.addToCart([{ id: 1, quantite: 1 }], 1, cards), [{ id: 1, quantite: 2 }]) || P.addToCart([{ id: 1, quantite: 1 }], 1, cards));
+    test("addToCart ne dépasse pas le stock (Pyrolynx : stock 1)", () => same(P.addToCart([{ id: 3, quantite: 1 }], 3, cards), [{ id: 3, quantite: 1 }]) || P.addToCart([{ id: 3, quantite: 1 }], 3, cards));
+    test("addToCart n'ajoute pas une carte en rupture (Reefling : stock 0)", () => (same(P.addToCart([], 5, cards), []) && P.addToCart([], 1, cards).length === 1) || "addToCart ne marche pas encore");
+    test("addToCart ne modifie pas le panier reçu", () => { const c1 = [{ id: 1, quantite: 1 }]; const before = JSON.stringify(c1); const c2 = P.addToCart(c1, 1, cards); return (JSON.stringify(c1) === before && c2 !== c1 && c2[0]?.quantite === 2) || "le panier d'origine a changé, ou addToCart ne marche pas encore"; });
+    test("changeQuantity +1", () => same(P.changeQuantity([{ id: 4, quantite: 2 }], 4, 1, cards), [{ id: 4, quantite: 3 }]) || P.changeQuantity([{ id: 4, quantite: 2 }], 4, 1, cards));
+    test("changeQuantity ne dépasse pas le stock (Aquaphin : stock 2)", () => same(P.changeQuantity([{ id: 6, quantite: 2 }], 6, 1, cards), [{ id: 6, quantite: 2 }]) || P.changeQuantity([{ id: 6, quantite: 2 }], 6, 1, cards));
+    test("changeQuantity -1 à 0 retire la ligne", () => same(P.changeQuantity([{ id: 4, quantite: 1 }, { id: 1, quantite: 2 }], 4, -1, cards), [{ id: 1, quantite: 2 }]) || P.changeQuantity([{ id: 4, quantite: 1 }, { id: 1, quantite: 2 }], 4, -1, cards));
+    test("changeQuantity ne modifie pas le panier reçu", () => { const c1 = [{ id: 4, quantite: 2 }]; const before = JSON.stringify(c1); const c2 = P.changeQuantity(c1, 4, 1, cards); return (JSON.stringify(c1) === before && c2[0]?.quantite === 3) || "le panier d'origine a changé, ou changeQuantity ne marche pas encore"; });
+    test("removeFromCart retire la bonne ligne", () => same(P.removeFromCart([{ id: 1, quantite: 2 }, { id: 4, quantite: 1 }], 1), [{ id: 4, quantite: 1 }]) || P.removeFromCart([{ id: 1, quantite: 2 }, { id: 4, quantite: 1 }], 1));
+    test("cartCount → 3", () => P.cartCount([{ id: 1, quantite: 2 }, { id: 4, quantite: 1 }]) === 3 || P.cartCount([{ id: 1, quantite: 2 }, { id: 4, quantite: 1 }]));
+    test("cartCount([]) → 0", () => (P.cartCount([]) === 0 && P.cartCount([{ id: 1, quantite: 2 }]) === 2) || "cartCount ne marche pas encore");
+    test("cartTotal → 34 DH (2 × Emberkit 12 + 1 × Tidalix 10)", () => P.cartTotal([{ id: 1, quantite: 2 }, { id: 4, quantite: 1 }], cards) === 34 || P.cartTotal([{ id: 1, quantite: 2 }, { id: 4, quantite: 1 }], cards));
+    test("cartTotal([]) → 0", () => (P.cartTotal([], cards) === 0 && P.cartTotal([{ id: 1, quantite: 1 }], cards) === 12) || "cartTotal ne marche pas encore");
+
+    section("Palier 3 (bonus) · cards.js");
+    test('sortCards(cards, "prix-asc") commence par Mossling (8 DH)', () => C.sortCards(cards, "prix-asc")[0]?.nom === "Mossling" || names(C.sortCards(cards, "prix-asc")).slice(0, 3));
+    test('sortCards(cards, "prix-desc") commence par Zaptera (120 DH)', () => C.sortCards(cards, "prix-desc")[0]?.nom === "Zaptera" || names(C.sortCards(cards, "prix-desc")).slice(0, 3));
+    test("sortCards ne modifie pas le tableau reçu", () => { const copy = [...cards]; const sorted = C.sortCards(copy, "prix-desc"); return (copy[0].id === 1 && sorted[0]?.nom === "Zaptera") || "le tableau d'origine a été trié, ou sortCards ne marche pas encore"; });
+    test("getStats(cards) : valeur du stock 1235 DH", () => C.getStats(cards).valeurStock === 1235 || C.getStats(cards).valeurStock);
+    test("getStats(cards) : plus chère = Zaptera", () => C.getStats(cards).plusChere?.nom === "Zaptera" || C.getStats(cards).plusChere);
+    test("getStats(cards) : 3 légendaires, 2 ruptures", () => (C.getStats(cards).legendaires === 3 && C.getStats(cards).ruptures === 2) || C.getStats(cards));
+    test("getStats([]) : plusChere vaut null", () => (C.getStats([]).plusChere === null && C.getStats(cards).legendaires === 3) || "getStats ne marche pas encore");
+    test("validateCardForm : tout juste → {}", () => (same(C.validateCardForm({ nom: "Glacio", prix: "20", stock: "4" }), {}) && Boolean(C.validateCardForm({ nom: "", prix: "20", stock: "4" }).nom)) || "validateCardForm ne marche pas encore");
+    test("validateCardForm : 3 erreurs", () => { const e = C.validateCardForm({ nom: "  ", prix: "0", stock: "-1" }); return (Boolean(e.nom) && Boolean(e.prix) && Boolean(e.stock)) || e; });
+    test("addCard : id 13, prix et stock en nombres", () => { const r = C.addCard(cards, { nom: "Glacio", type: "Eau", rarete: "Rare", prix: "20", stock: "4" }); const n = r[r.length - 1]; return (r.length === 13 && n.id === 13 && n.prix === 20 && n.stock === 4) || n; });
+
+    test("data.js n'a jamais été modifié par les fonctions", () => JSON.stringify(cards) === snapshot || "le tableau cards a changé");
+
+    document.querySelector("#score").textContent = `${passed} / ${total} tests réussis`;
+  </script>
+</body>
+</html>
