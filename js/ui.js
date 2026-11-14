@@ -80,14 +80,36 @@ export function renderCount(n) {
  * - stock 0 : classe out-of-stock sur l'article ET bouton désactivé (disabled = true)
  * - palier 2 : classe is-selected si la carte est dans le panier (cart.some(...))
  */
-export function AfficherLesCartes (){
+// renderCart(cards, )
 
-
-}
 export function renderGrid(list, cart) {
+
   // TODO 1. Videz #grid
+  grid.innerHTML="";
   // TODO 2. Liste vide : ajoutez le message et arrêtez (return)
+  if (list === ""){
+    console.log ("le liste et  vide")
+    return;
+  }
+
   // TODO 3. Pour chaque carte : créez l'article et ses enfants, puis grid.append(article)
+list.forEach(carte => {
+
+  grid.innerHTML += `<div>
+   <article class="card" data-id=${carte.id}>
+  <p class= "card__num"> ${carte.id}</p>
+   <img class="card__img" src=${carte.image} alt=${carte.nom}>
+   <h3 class= "card__name"> ${carte.nom}</h3>
+   <p class="card__meta"><span class="badge type-feu">Feu</span> <span class="rarity">Commune</span></p>
+   <p class ="card__price">${carte.prix} DH </p>
+   <button class="btn btn--primary" type="button" >Ajouter</button>
+  </div>
+  </article>`
+
+})
+
+ 
+
 }
 
 /**
@@ -144,23 +166,25 @@ export function showFormErrors(errors) {
   // TODO
 }
 
-export function AfficherLesCart() {
+// export function AfficherLesCart() {
 
-  cards.forEach(card => {
+//   cards.forEach(card => {
     
-    grid.innerHTML += `<div> 
-    <div> <p>${card.id}</p> </div>
-    <div> 
-    <img src= "${card.image}" alt= "${card.nom}"</div>
-    <div> <h2> ${card.nom}</h2> 
-    <p> ${card.type}  </p>
-    </div>
-    <div> 
-    <p> Stock: ${card.stock}</p>
-    <p> ${card.prix} DH</p> 
-    </div>
+//     grid.innerHTML += `<div> 
+//     <div> <p>${card.id}</p> </div>
+//     <div> 
+//     <img src= "${card.image}" alt= "${card.nom}"</div>
+//     <div> <h2> ${card.nom}</h2> 
+//     <p> ${card.type}  </p>
+//     </div>
+//     <div> 
+//     <p> Stock: ${card.stock}</p>
+//     <p> ${card.prix} DH</p> 
+//     </div>
 
-    </div>`
-  })
+//     </div>`
+//   })
   
-}
+// }
+
+

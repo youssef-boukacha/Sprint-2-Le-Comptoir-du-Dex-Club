@@ -10,9 +10,8 @@ import { cards } from "../data.js";
 import * as dataCards from "./cards.js";
 import * as dataCart from "./cart.js";
 import * as ui from "./ui.js";
-import { AfficherLesCart } from "./ui.js";
-AfficherLesCart();
-
+import { renderGrid } from "./ui.js";
+renderGrid(cards, );
 // ---------- L'état : la seule source de vérité ----------
 const state = {
   cards: [...cards],                        // copie : data.js n'est jamais modifié
@@ -48,6 +47,8 @@ function refresh() {
 // Recherche : à chaque frappe
 searchInput.addEventListener("input", () => {
   // TODO : mettez à jour state.filters.term avec la valeur du champ, puis refresh()
+    state.filters.term ()
+   
 });
 
 // Types : UN SEUL écouteur sur #types (délégation)

@@ -16,11 +16,20 @@
  * - si `term` est vide, renvoie toutes les cartes
  * Exemple : searchCards(cards, "kit") → [Emberkit, Sparkit]
  */
+ import { cards } from "../data";
+
+
 export function searchCards(cards, term) {
   // TODO 1. Nettoyez le terme : trim() puis toLowerCase()
+ const inputSearch = term.trim().toLowerCase();
   // TODO 2. Si le terme est vide, renvoyez une copie de cards
+  if (inputSearch ===""){ 
+    return cards;
+  }
   // TODO 3. Sinon, renvoyez cards.filter(...) : le nom en minuscules contient-il le terme ?
-  return [];
+   const findCard = cards.filter(card => card.nom.includes(inputSearch))
+  return findCard;
+
 }
 
 /**
@@ -29,7 +38,12 @@ export function searchCards(cards, term) {
  */
 export function filterByType(cards, type) {
   // TODO
-  return [];
+  const CarteType = cards.filter (card =>{
+    card.type === type;
+  }
+
+  )
+  return CarteType;
 }
 
 /**
@@ -37,9 +51,14 @@ export function filterByType(cards, type) {
  * filters = { term: "kit", type: "Feu" }
  * Exemple : getVisibleCards(cards, { term: "kit", type: "Feu" }) → [Emberkit]
  */
+
 export function getVisibleCards(cards, filters) {
+  const typeCards = filterByType(cards, filters.type)
+  const resultSearch = searchCards (typeCards, filters.term)
+
   // TODO : appelez filterByType, puis searchCards sur le résultat
-  return [];
+
+  return resultSearch;
 }
 
 /**
@@ -48,6 +67,14 @@ export function getVisibleCards(cards, filters) {
  */
 export function countByType(cards) {
   // TODO 1. Créez un objet vide : const counts = {};
+  const counts = {};
+  cards.forEach(card => {
+    if (card.type != counts.type)
+    {
+      counts =type.
+    }
+    
+  });
   // TODO 2. Pour chaque carte : si counts[carte.type] n'existe pas, mettez 0, puis ajoutez 1
   // TODO 3. Renvoyez counts
   return {};
