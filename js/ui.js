@@ -5,6 +5,9 @@
 // (Pas de innerHTML avec des données : seulement innerHTML = "" pour vider une zone.)
 // =============================================================
 
+import { cards } from "../data.js";
+
+
 const typesBox = document.querySelector("#types");
 const grid = document.querySelector("#grid");
 const count = document.querySelector("#count");
@@ -77,6 +80,10 @@ export function renderCount(n) {
  * - stock 0 : classe out-of-stock sur l'article ET bouton désactivé (disabled = true)
  * - palier 2 : classe is-selected si la carte est dans le panier (cart.some(...))
  */
+export function AfficherLesCartes (){
+
+
+}
 export function renderGrid(list, cart) {
   // TODO 1. Videz #grid
   // TODO 2. Liste vide : ajoutez le message et arrêtez (return)
@@ -135,4 +142,25 @@ export function renderStats(stats) {
  */
 export function showFormErrors(errors) {
   // TODO
+}
+
+export function AfficherLesCart() {
+
+  cards.forEach(card => {
+    
+    grid.innerHTML += `<div> 
+    <div> <p>${card.id}</p> </div>
+    <div> 
+    <img src= "${card.image}" alt= "${card.nom}"</div>
+    <div> <h2> ${card.nom}</h2> 
+    <p> ${card.type}  </p>
+    </div>
+    <div> 
+    <p> Stock: ${card.stock}</p>
+    <p> ${card.prix} DH</p> 
+    </div>
+
+    </div>`
+  })
+  
 }

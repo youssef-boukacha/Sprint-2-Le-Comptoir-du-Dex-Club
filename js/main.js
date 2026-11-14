@@ -10,6 +10,8 @@ import { cards } from "../data.js";
 import * as dataCards from "./cards.js";
 import * as dataCart from "./cart.js";
 import * as ui from "./ui.js";
+import { AfficherLesCart } from "./ui.js";
+AfficherLesCart();
 
 // ---------- L'état : la seule source de vérité ----------
 const state = {
