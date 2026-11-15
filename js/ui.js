@@ -56,12 +56,34 @@ export function renderTypes(counts, activeType) {
   // TODO 1. Videz #types
   typesBox.innerHTML="";
   // TODO 2. Créez le bouton « Tous (…) »
-  const btn = document.createElement("button")
-  btn.className="type-btn"
-  btn.type= "button"
-  btn.textContent= "Tous"
-  typesBox.append(btn);
+  const TotaleDeTypes = Object.values(counts).reduce((Prev, counts)=> sum + count ,0)
+    const btn = document.createElement("button");
+btn.className = "type-btn";
+  btn.type = "button";
+  btn.dataset.type = "Tous";
+  btn.textContent = `Tous (${total})`;
+  if (activeType === "Tous") {
+    btn.classList.add("is-active");
+  }
+    typesBox.append(btn);
+ for (const type in counts) {
+
+    const button = document.createElement("button");
+
+    button.className = "type-btn";
+    button.type = "button";
+    button.dataset.type = type;
+    button.textContent = `${type} (${counts[type]})`;
+
+    if (activeType === type) {
+      button.classList.add("is-active");
+    }
+
+    typesBox.append(button);
+  }
+}
   
+
 
 
 

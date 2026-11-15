@@ -70,12 +70,12 @@ export function countByType(cards) {
   // TODO 2. Pour chaque carte : si counts[carte.type] n'existe pas, mettez 0, puis ajoutez 1
   cards.forEach(card => {
     
-    
+    // add type in counts object 
     if (!(card.type in counts)){
       counts[card.type]= 0;
 
     }
-   
+   // if type existe in object add 1
       counts[card.type] += 1;
     
 
