@@ -54,7 +54,19 @@ export function el(tag, className = "", text = "") {
  */
 export function renderTypes(counts, activeType) {
   // TODO 1. Videz #types
+  typesBox.innerHTML="";
   // TODO 2. Créez le bouton « Tous (…) »
+  const btn = document.createElement("button")
+  btn.className="type-btn"
+  btn.type= "button"
+  btn.textContent= "Tous"
+  typesBox.append(btn);
+  
+
+
+
+
+
   // TODO 3. Pour chaque type de counts (for...in ou Object.keys), créez un bouton
 }
 
@@ -92,10 +104,7 @@ export function renderGrid(list, cart) {
     console.log("le liste est vide")
     return;
   }
-  
   // TODO 3. Pour chaque carte : créez l'article et ses enfants, puis grid.append(article)
-
-
   list.forEach(carte => {
 let article = document.createElement('article')
 let  pic = document.createElement('img')
@@ -135,25 +144,7 @@ btn.textContent = "Ajouter"
 
 article.append(pic, parag,  h3, paragra, prix,  btn)
 grid.append(article)
-
-
-
 })
-//   grid.innerHTML += `<div>
-//    <article class="card" data-id=${carte.id}>
-//   <p class= "card__num"> ${carte.id}</p>
-//    <img class="card__img" src=${carte.image} alt=${carte.nom}>
-//    <h3 class= "card__name"> ${carte.nom}</h3>
-//    <p class="card__meta"><span class="badge type-feu">Feu</span> <span class="rarity">Commune</span></p>
-//    <p class ="card__price">${carte.prix} DH </p>
-//    <button class="btn btn--primary" type="button" >Ajouter</button>
-//   </div>
-//   </article>`
-
-// })
-
- 
-
 }
 
 /**
@@ -210,25 +201,6 @@ export function showFormErrors(errors) {
   // TODO
 }
 
-// export function AfficherLesCart() {
 
-//   cards.forEach(card => {
-    
-//     grid.innerHTML += `<div> 
-//     <div> <p>${card.id}</p> </div>
-//     <div> 
-//     <img src= "${card.image}" alt= "${card.nom}"</div>
-//     <div> <h2> ${card.nom}</h2> 
-//     <p> ${card.type}  </p>
-//     </div>
-//     <div> 
-//     <p> Stock: ${card.stock}</p>
-//     <p> ${card.prix} DH</p> 
-//     </div>
-
-//     </div>`
-//   })
-  
-// }
 
 
