@@ -16,7 +16,6 @@
  * - si `term` est vide, renvoie toutes les cartes
  * Exemple : searchCards(cards, "kit") → [Emberkit, Sparkit]
  */
- import { cards } from "../data";
 
 
 export function searchCards(cards, term) {
@@ -68,16 +67,24 @@ export function getVisibleCards(cards, filters) {
 export function countByType(cards) {
   // TODO 1. Créez un objet vide : const counts = {};
   const counts = {};
-  cards.forEach(card => {
-    if (card.type != counts.type)
-    {
-      counts =type.
-    }
-    
-  });
   // TODO 2. Pour chaque carte : si counts[carte.type] n'existe pas, mettez 0, puis ajoutez 1
+  cards.forEach(card => {
+    
+    
+    if (!(card.type in counts)){
+      counts[card.type]= 0;
+
+    }
+   
+      counts[card.type] += 1;
+    
+
+
+  });
+  
+
   // TODO 3. Renvoyez counts
-  return {};
+  return counts;
 }
 
 // -------------------------------------------------------------

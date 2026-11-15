@@ -5,6 +5,7 @@
 // (Pas de innerHTML avec des données : seulement innerHTML = "" pour vider une zone.)
 // =============================================================
 
+import { createElement } from "react";
 import { cards } from "../data.js";
 
 
@@ -88,25 +89,68 @@ export function renderGrid(list, cart) {
   grid.innerHTML="";
   // TODO 2. Liste vide : ajoutez le message et arrêtez (return)
   if (list === ""){
-    console.log ("le liste et  vide")
+    console.log("le liste est vide")
     return;
   }
-
+  
   // TODO 3. Pour chaque carte : créez l'article et ses enfants, puis grid.append(article)
-list.forEach(carte => {
 
-  grid.innerHTML += `<div>
-   <article class="card" data-id=${carte.id}>
-  <p class= "card__num"> ${carte.id}</p>
-   <img class="card__img" src=${carte.image} alt=${carte.nom}>
-   <h3 class= "card__name"> ${carte.nom}</h3>
-   <p class="card__meta"><span class="badge type-feu">Feu</span> <span class="rarity">Commune</span></p>
-   <p class ="card__price">${carte.prix} DH </p>
-   <button class="btn btn--primary" type="button" >Ajouter</button>
-  </div>
-  </article>`
+
+  list.forEach(carte => {
+let article = document.createElement('article')
+let  pic = document.createElement('img')
+pic.src = carte.Image;
+pic.alt = carte.nom;
+pic.className= "card__img";
+
+let parag = document.createElement('p');
+parag.className = "card__num"
+parag.textContent= carte.id
+
+
+let h3= document.createElement('h3')
+h3.className= "carte.name"
+h3.textContent= carte.name;
+
+let paragra = document.createElement('p')
+paragra.className="card__meta"
+
+let badge = document.createElement("span");
+badge.className = carte.type;
+badge.textContent = carte.nom;
+
+let rarity = document.createElement("span");
+rarity.className = "rarity";
+rarity.textContent =  carte.rarete;
+
+paragra.append(badge, rarity);
+ let prix = document.createElement("p")
+prix.textContent= carte.prix ;
+
+let btn = document.createElement("button")
+btn.className= "btn btn--primary";
+btn.type = "button"
+btn.textContent = "Ajouter"
+
+
+article.append(pic, parag,  h3, paragra, prix,  btn)
+grid.append(article)
+
+
 
 })
+//   grid.innerHTML += `<div>
+//    <article class="card" data-id=${carte.id}>
+//   <p class= "card__num"> ${carte.id}</p>
+//    <img class="card__img" src=${carte.image} alt=${carte.nom}>
+//    <h3 class= "card__name"> ${carte.nom}</h3>
+//    <p class="card__meta"><span class="badge type-feu">Feu</span> <span class="rarity">Commune</span></p>
+//    <p class ="card__price">${carte.prix} DH </p>
+//    <button class="btn btn--primary" type="button" >Ajouter</button>
+//   </div>
+//   </article>`
+
+// })
 
  
 

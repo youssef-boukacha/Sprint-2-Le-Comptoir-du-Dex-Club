@@ -11,7 +11,7 @@ import * as dataCards from "./cards.js";
 import * as dataCart from "./cart.js";
 import * as ui from "./ui.js";
 import { renderGrid } from "./ui.js";
-renderGrid(cards, );
+renderGrid(cards)
 // ---------- L'état : la seule source de vérité ----------
 const state = {
   cards: [...cards],                        // copie : data.js n'est jamais modifié
@@ -27,6 +27,7 @@ const grid = document.querySelector("#grid");
 const cartList = document.querySelector("#cart-list");
 const sortSelect = document.querySelector("#sort");
 const form = document.querySelector("#card-form");
+
 
 // ---------- Redessiner la page à partir de l'état (déjà écrit) ----------
 function refresh() {
